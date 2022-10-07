@@ -6,6 +6,9 @@
             display: block;
             box-shadow: $shadow-menu;
             margin-bottom: 15px;
+            &:last-child {
+                margin-bottom: 0;
+            }
             .item-header {
                 @include flexbox();
                 @include justify-content(space-between);

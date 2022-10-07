@@ -45,11 +45,11 @@ export default class QickActionTop extends React.Component {
           <>
             {iOS() ? (
               <Link external href={mess} noLinkClass className="item mess">
-                <i class="fab fa-facebook-messenger text-white"></i>
+                <i className="fab fa-facebook-messenger text-white"></i>
               </Link>
             ) : (
               <div className="mess" onClick={() => this.handleLink(mess)}>
-                <i class="fab fa-facebook-messenger text-white"></i>
+                <i className="fab fa-facebook-messenger text-white"></i>
               </div>
             )}
           </>

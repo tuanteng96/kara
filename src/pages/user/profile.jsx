@@ -1,28 +1,33 @@
-import React from "react";
-import bgImage from "../../assets/images/headerbottombgapp.png";
-import imgWallet from "../../assets/images/wallet.svg";
-import imgLocation from "../../assets/images/location.svg";
-import imgOrder from "../../assets/images/order.svg";
-import imgDiary from "../../assets/images/diary.svg";
-import imgCoupon from "../../assets/images/coupon.svg";
-import imgEvaluate from "../../assets/images/evaluate.svg";
-import { checkAvt } from "../../constants/format";
-import { getUser, getPassword, app_request } from "../../constants/user";
-import { Page, Link, Toolbar, Row, Col, f7 } from "framework7-react";
-import ToolBarBottom from "../../components/ToolBarBottom";
-import UserService from "../../service/user.service";
-import Skeleton from "react-loading-skeleton";
-import { REMOVE_BADGE, SEND_TOKEN_FIREBASE, SET_BADGE } from "../../constants/prom21";
-import { iOS } from "../../constants/helpers";
+import React from 'react'
+import bgImage from '../../assets/images/headerbottombgapp.png'
+import imgWallet from '../../assets/images/wallet.svg'
+import imgLocation from '../../assets/images/location.svg'
+import imgOrder from '../../assets/images/order.svg'
+import imgDiary from '../../assets/images/diary.svg'
+import imgCoupon from '../../assets/images/coupon.svg'
+import imgEvaluate from '../../assets/images/evaluate.svg'
+import { checkAvt, formatPriceVietnamese } from '../../constants/format'
+import { getUser, getPassword, app_request } from '../../constants/user'
+import { Page, Link, Toolbar, Row, Col, f7 } from 'framework7-react'
+import ToolBarBottom from '../../components/ToolBarBottom'
+import UserService from '../../service/user.service'
+import Skeleton from 'react-loading-skeleton'
+import {
+  REMOVE_BADGE,
+  SEND_TOKEN_FIREBASE,
+  SET_BADGE,
+} from '../../constants/prom21'
+import { iOS } from '../../constants/helpers'
+import OrderList from './OrderList/OrderList'
 
 export default class extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       memberInfo: {},
       isLoading: true,
       showPreloader: false,
-    };
+    }
   }
   componentDidMount() {
     // const username = infoUser.MobilePhone
@@ -32,74 +37,74 @@ export default class extends React.Component {
     UserService.getInfo()
       .then(({ data }) => {
         if (data.error) {
-          this.$f7router.navigate("/login/");
+          this.$f7router.navigate('/login/')
         } else {
           this.setState({
             memberInfo: data,
             isLoading: false,
-          });
+          })
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
   }
   signOut = () => {
-    const $$this = this;
+    const $$this = this
     $$this.$f7.dialog.confirm(
-      "Bạn muốn đăng xuất khỏi tài khoản ?",
+      'Bạn muốn đăng xuất khỏi tài khoản ?',
       async () => {
-        f7.dialog.preloader(`Đăng xuất ...`);
+        f7.dialog.preloader(`Đăng xuất ...`)
         SEND_TOKEN_FIREBASE().then(async (response) => {
           if (!response.error && response.Token) {
-            const { ID, acc_type } = getUser();
+            const { ID, acc_type } = getUser()
             await UserService.authRemoveFirebase({
               Token: response.Token,
               ID: ID,
               Type: acc_type,
-            });
+            })
           } else {
-            app_request("unsubscribe", "");
+            app_request('unsubscribe', '')
           }
-          iOS() && REMOVE_BADGE();
-          await localStorage.clear();
-          await new Promise((resolve) => setTimeout(resolve, 800));
-          f7.dialog.close();
-          $$this.$f7router.navigate("/", {
+          iOS() && REMOVE_BADGE()
+          await localStorage.clear()
+          await new Promise((resolve) => setTimeout(resolve, 800))
+          f7.dialog.close()
+          $$this.$f7router.navigate('/', {
             reloadCurrent: true,
-          });
-        });
-      }
-    );
-  };
+          })
+        })
+      },
+    )
+  }
 
   checkMember = (memberInfo) => {
-    if (!memberInfo) return false;
-    if (memberInfo.acc_type === "M") {
+    if (!memberInfo) return false
+    if (memberInfo.acc_type === 'M') {
       return memberInfo.acc_group > 0
         ? memberInfo.MemberGroups[0].Title
-        : "Thành viên";
+        : 'Thành viên'
     }
     if (memberInfo.ID === 1) {
-      return "ADMIN";
+      return 'ADMIN'
     }
-    if (memberInfo.acc_type === "U" && memberInfo.GroupTitles.length > 0) {
-      return memberInfo.GroupTitles.join(", ");
+    if (memberInfo.acc_type === 'U' && memberInfo.GroupTitles.length > 0) {
+      return memberInfo.GroupTitles.join(', ')
     }
-  };
+  }
 
   loadRefresh(done) {
     setTimeout(() => {
       this.$f7.views.main.router.navigate(this.$f7.views.main.router.url, {
         reloadCurrent: true,
-      });
+      })
       this.setState({
         showPreloader: true,
-      });
-      done();
-    }, 600);
+      })
+      done()
+    }, 600)
   }
 
   render() {
-    const { memberInfo, isLoading } = this.state;
+    const { memberInfo, isLoading } = this.state
     return (
       <Page
         name="profile-list"
@@ -121,9 +126,9 @@ export default class extends React.Component {
               <i className="las la-sign-out-alt"></i>
             </Link>
           </div>
-          <img src={bgImage} />
         </div>
         <div className="profile-info">
+          <img src={bgImage} />
           <div className="profile-info__avatar">
             {isLoading ? (
               <Skeleton circle={true} height={90} width={90} />
@@ -153,28 +158,30 @@ export default class extends React.Component {
             </div>
           )}
 
-          <div className="profile-info__shortcuts">
-            <div className="profile-info__shortcut">
-              <Row>
-                <Col width="50">
-                  <div className="profile-info__shortcut-item">
-                    <Link noLinkClass href="/detail-profile/">
-                      Thông tin cá nhân
-                    </Link>
-                  </div>
-                </Col>
-                <Col width="50">
-                  <div className="profile-info__shortcut-item">
-                    <Link noLinkClass href="/barcode/">
-                      Check In
-                    </Link>
-                  </div>
-                </Col>
-              </Row>
-            </div>
+          <div className="profile-wallet px-15px border-top">
+            <Row>
+              <Col width="50 border-right">
+                <div className="profile-wallet-item">
+                  <div className="profile-wallet__price font-number">{formatPriceVietnamese(memberInfo?.Present?.nap_vi)}</div>
+                  <div className="profile-wallet__title">Ví khả dụng</div>
+                </div>
+              </Col>
+              <Col width="50">
+                <div className="profile-wallet-item">
+                  <div className="profile-wallet__price font-number">{formatPriceVietnamese(memberInfo?.Present?.the_tien_kha_dung)}</div>
+                  <div className="profile-wallet__title">Thẻ tiền</div>
+                </div>
+              </Col>
+            </Row>
           </div>
         </div>
-        <div className="profile-function">
+        <div className="bg-white mt-4px">
+          <div className="p-15px text-uppercase fw-600">
+            Đơn hàng của bạn
+          </div>
+        </div>
+        <OrderList />
+        {/* <div className="profile-function">
           <Row>
             <Col width="33">
               <Link noLinkClass href="/wallet/">
@@ -225,11 +232,11 @@ export default class extends React.Component {
               </Link>
             </Col>
           </Row>
-        </div>
+        </div> */}
         <Toolbar tabbar position="bottom">
           <ToolBarBottom />
         </Toolbar>
       </Page>
-    );
+    )
   }
 }

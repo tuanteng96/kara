@@ -82,7 +82,7 @@ export default class extends React.Component {
         </Navbar>
         <div>
           <div>
-            {loadingCate && <Skeleton height={170} />}
+            {loadingCate && <Skeleton height={220} />}
             {!loadingCate && (
               <img
                 className="w-100"
@@ -93,7 +93,7 @@ export default class extends React.Component {
           </div>
           <div className="p-15px">
             <Row>
-              {List &&
+            {!loading && List &&
                 List.map((item, index) => (
                   <Col width="50" key={index}>
                     <div className="bg-white mb-15px rounded-sm" key={index}>
@@ -110,6 +110,22 @@ export default class extends React.Component {
                         </div>
                         <div className="fw-700 text-dark text-center mt-12px">
                           {item.text}
+                        </div>
+                      </Link>
+                    </div>
+                  </Col>
+                ))}
+              {loading && Array(4).fill().map((item, index) => (
+                  <Col width="50" key={index}>
+                    <div className="bg-white mb-15px rounded-sm" key={index}>
+                      <Link
+                        className="px-10px py-15px d-flex fd--c"
+                      >
+                        <div className="h-60px">
+                          <Skeleton width={60} height={60} circle/>
+                        </div>
+                        <div className="fw-700 text-dark text-center mt-12px">
+                          <Skeleton width={100} height={18}/>
                         </div>
                       </Link>
                     </div>
