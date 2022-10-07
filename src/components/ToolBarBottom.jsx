@@ -188,27 +188,28 @@ export default class ToolBarCustom extends React.Component {
             </Link>
             <Link
               noLinkClass
-              href="/shop/"
+              href="/sale/"
               className="page-toolbar-bottom__link js-toolbar-link"
             >
-              <i className="las la-shopping-cart"></i>
+              <i className="las la-gift"></i>
             </Link>
             <Link
               noLinkClass
-              href="/schedule/"
+              href="/shop/"
               className="page-toolbar-bottom__link active"
             >
               <div className="page-toolbar-bottom__link-inner">
-                <img src={iconBook} alt="Đặt lịch" />
+                {/* <img src={iconBook} alt="Đặt lịch" /> */}
                 {/* <i className="las la-calendar-plus"></i> */}
+                <i className="las la-shopping-bag"></i>
               </div>
             </Link>
             <Link
               noLinkClass
-              href="/cardservice/"
+              href="/policy/"
               className="page-toolbar-bottom__link js-toolbar-link"
             >
-              <i className="las la-clipboard-list"></i>
+              <i className="las la-handshake"></i>
             </Link>
             <Link
               noLinkClass
@@ -217,6 +218,10 @@ export default class ToolBarCustom extends React.Component {
             >
               <i className="las la-user-circle"></i>
             </Link>
+            <div className="page-toolbar-indicator">
+              <div className="page-toolbar-indicator__left"></div>
+              <div className="page-toolbar-indicator__right"></div>
+            </div>
           </React.Fragment>
         );
       default:
@@ -231,26 +236,27 @@ export default class ToolBarCustom extends React.Component {
             </Link>
             <Link
               noLinkClass
-              href="/shop/"
+              href="/sale/"
               className="page-toolbar-bottom__link js-toolbar-link"
             >
               <i className="las la-gift"></i>
             </Link>
             <Link
               noLinkClass
-              href="/login/"
+              href="/shop/"
               className="page-toolbar-bottom__link active"
             >
               <div className="page-toolbar-bottom__link-inner">
-                <img src={iconBook} alt="Đặt lịch" />
+                <i className="las la-shopping-bag"></i>
+                {/* <img src={iconBook} alt="Đặt lịch" /> */}
               </div>
             </Link>
             <Link
               noLinkClass
-              href="/maps/"
+              href="/policy/"
               className="page-toolbar-bottom__link js-toolbar-link"
             >
-              <i className="las la-user-shield"></i>
+              <i className="las la-handshake"></i>
             </Link>
             <Link
               noLinkClass

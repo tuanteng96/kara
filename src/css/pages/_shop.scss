@@ -44,6 +44,9 @@
                 overflow: hidden;
                 background: $white;
                 margin-bottom: 15px;
+                &:last-child {
+                    margin-bottom: 0;
+                }
                 &.no-before {
                     a {
                         &:before {

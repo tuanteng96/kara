@@ -50,7 +50,11 @@ import EmployeeStatisticalPage from "../pages/employee/statistical/employeeStati
 import ReportPage from "../pages/report/index";
 
 // Pos bán hàng
-import PosPage from "../pages/pos/Pos"
+import PosPage from "../pages/pos/Pos";
+import PolicyPage from "../pages/policy/Policy";
+import PolicyDetailPage from "../pages/policy/PolicyDetail";
+
+import SalesDetailPage from "../pages/Sales/SalesDetail";
 
 import SearchPage from "../pages/search/index";
 import NotFoundPage from '../pages/404.jsx';
@@ -119,6 +123,14 @@ var routes = [{
         asyncComponent: () => NewsDetailPage,
     },
     {
+        path: '/sale/',
+        asyncComponent: () => SalesDetailPage,
+    },
+    {
+        path: '/sale/:id',
+        asyncComponent: () => SalesDetailPage,
+    },
+    {
         path: '/rules-list/',
         asyncComponent: () => RulesListPage,
     },
@@ -181,6 +193,20 @@ var routes = [{
     {
         path: '/maps/',
         asyncComponent: () => MapsPage,
+        options: {
+            transition: 'f7-cover',
+        }
+    },
+    {
+        path: '/policy/',
+        asyncComponent: () => PolicyPage,
+        options: {
+            transition: 'f7-cover',
+        }
+    },
+    {
+        path: '/policy/:id/',
+        asyncComponent: () => PolicyDetailPage,
         options: {
             transition: 'f7-cover',
         }

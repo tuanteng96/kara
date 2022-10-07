@@ -1,6 +1,14 @@
 .page-news {
     background: rgb(255, 255, 255);
     background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 0%, rgba(241, 245, 248, 1) 100%);
+    .title-news {
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 26px;
+        margin-bottom: 8px;
+        text-align: left;
+        color: var(--ezs-color);
+    }
     &__header {
         @include flexbox();
         @include justify-content(space-between);
@@ -156,7 +164,6 @@
         }
     }
     &__detail {
-        background: $white;
         &-img {
             width: 100%;
         }

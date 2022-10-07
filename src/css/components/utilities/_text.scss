@@ -42,6 +42,10 @@ $color in $theme-colors {
     color: #5E6278 !important;
 }
 
+.text-ezs {
+    color: var(--ezs-color)
+}
+
 // 
 .text-truncate {
     @include cut-text();
