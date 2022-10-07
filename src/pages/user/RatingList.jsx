@@ -4,8 +4,8 @@ import PageNoData from "../../components/PageNoData";
 import ToolBarBottom from "../../components/ToolBarBottom";
 import StarComponent from "../../components/StarComponent";
 import UserService from "../../service/user.service";
-import Avatar from "@material-ui/core/Avatar";
-import AvatarGroup from "@material-ui/lab/AvatarGroup";
+// import Avatar from "@material-ui/core/Avatar";
+// import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import { getDateFacebook, checkAvt2 } from "../../constants/format";
 import { getUser } from "../../constants/user";
 import { toast } from "react-toastify";
@@ -172,7 +172,7 @@ export default class extends React.Component {
                       {index + 1}. {item.prod.Title}
                     </div>
                     <div className="rating-header__user">
-                      <AvatarGroup max={2}>
+                      {/* <AvatarGroup max={2}>
                         {item.staff.map((user, i) => (
                           <Avatar
                             className="avatar-img"
@@ -181,7 +181,7 @@ export default class extends React.Component {
                             src={checkAvt2(user.Avatar)}
                           />
                         ))}
-                      </AvatarGroup>
+                      </AvatarGroup> */}
                     </div>
                   </div>
                   <div className="rating-content">

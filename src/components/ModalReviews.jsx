@@ -4,8 +4,8 @@ import { Page, Sheet } from "framework7-react";
 import UserService from "../service/user.service";
 import { getUser } from "../constants/user";
 import { checkAvt2 } from "../constants/format";
-import Avatar from '@material-ui/core/Avatar';
-import AvatarGroup from '@material-ui/lab/AvatarGroup';
+// import Avatar from '@material-ui/core/Avatar';
+// import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -120,13 +120,13 @@ export default class ModalReviews extends React.Component {
                                     <div className="content-box" key={index}>
                                         <div className="content-box__user">
                                             <div className="avatar">
-                                                <AvatarGroup max={3}>
+                                                {/* <AvatarGroup max={3}>
                                                     {
                                                         item.staff.map((user, i) => (
                                                             <Avatar className="avatar-img" key={i} alt={user.FullName} src={checkAvt2(user.Avatar)} />
                                                         ))
                                                     }
-                                                </AvatarGroup>
+                                                </AvatarGroup> */}
                                             </div>
                                             <div className="name">
                                                 {
