@@ -43,7 +43,7 @@ export default class extends React.Component {
 
     this.delayedCallback = _.debounce(this.inputCallback, 400);
   }
-  getService = (id) => {
+  getService = (id, filters, callback) => {
     var $$ = this.Dom7;
     var container = $$(".page-content");
     container.scrollTop(0, 300);
@@ -54,15 +54,25 @@ export default class extends React.Component {
     this.setState({
       isLoading: true,
     });
-    ShopDataService.getServiceParent(CateID, stockid, Pi, 2, 1)
+    ShopDataService.getServiceParent(CateID, stockid, Pi, filters?.Ps || 2, 1)
       .then(({ data }) => {
-        const { lst, pcount, pi } = data;
+        const { lst, total, pi } = data;
+        let newPi = pi;
+        const index = this.$f7route?.query?.index;
+        if (!filters?.notQuery && index) {
+          let indexPi = Math.round(index / 2);
+          if (newPi < indexPi) {
+            newPi = indexPi;
+          }
+        }
+
         this.setState({
           arrService: lst,
           isLoading: false,
-          Count: pcount,
-          Pi: pi,
+          Count: Math.round(total / 2),
+          Pi: newPi,
         });
+        callback && callback();
       })
       .catch((e) => console.log(e));
   };
@@ -89,20 +99,25 @@ export default class extends React.Component {
       currentId: this.$f7route.params.cateId,
     });
 
-    this.timer = setTimeout(() => {
-      if (this.$f7route.query && this.$f7route.query.ids) {
-        this.setState((prevState) => ({ idOpen: this.$f7route.query.ids }));
-      }
-    }, 300);
-
     this.$f7ready((f7) => {
+      const index = this.$f7route?.query?.index;
+      let filters = null;
+      if (index) {
+        filters = {
+          Ps: Math.round(index / 2) * 2,
+        };
+      }
       this.getTitleCate();
-      this.getService();
+      this.getService(this.$f7route.params?.cateId || "", filters, () => {
+        if (this.$f7route.query && this.$f7route.query.ids) {
+          var $ = this.Dom7;
+          var container = $(".page-content");
+          const offsetTop = $(`#${this.$f7route.query.ids}`).offset().top;
+          container.scrollTop(offsetTop - 96, 300);
+          this.setState((prevState) => ({ idOpen: this.$f7route.query.ids }));
+        }
+      });
     });
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.timer);
   }
 
   inputCallback = (value) => {
@@ -160,7 +175,7 @@ export default class extends React.Component {
       Pi: 1,
       Count: 0,
     });
-    this.getService(cate.ID);
+    this.getService(cate.ID, { notQuery: true });
     this.getTitleCate(cate.ID);
     // this.$f7router.navigate(this.$f7router.currentRoute.url, {
     //   ignoreCache  : true,
@@ -180,7 +195,6 @@ export default class extends React.Component {
     if (Pi >= Count) {
       return false;
     }
-    if (showPreloader) return false;
     this.setState({ showPreloader: true });
     const CateID = currentId || this.$f7route.params.cateId;
     let stockid = getStockIDStorage();
@@ -272,7 +286,8 @@ export default class extends React.Component {
                       arrService.map((item, index) => (
                         <div
                           className="page-shop__service-item"
-                          key={item.root.ID}
+                          id={item.root.ID}
+                          key={index}
                         >
                           <div className="page-shop__service-item service-about">
                             <div className="service-about__img">
@@ -290,12 +305,12 @@ export default class extends React.Component {
                                   e.target.src = NoProduct;
                                 }}
                               />
-                              <Link
+                              {/* <Link
                                 href={`/schedule/?SelectedTitle=${item.root.Title}&SelectedId=${item.root.ID}`}
                                 className="_btn"
                               >
                                 Đặt lịch ngay
-                              </Link>
+                              </Link> */}
                               {/* <button>Đặt lịch ngay</button> */}
                             </div>
                             <div

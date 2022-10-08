@@ -37,6 +37,7 @@ import QuickAction from "../../components/quickAction";
 import ProductList from "../home/components/Product/ProductList";
 import Dom7 from "dom7";
 import QickActionTop from "../../components/quickAction/QickActionTop";
+import ServiceTags from "./components/Service/ServiceTags";
 
 export default class extends React.Component {
   constructor() {
@@ -192,11 +193,14 @@ export default class extends React.Component {
             <Suspense fallback={<div>Loading...</div>}>
               <ListImage />
             </Suspense>
+            <ServiceTags tag={2} />
+            <ServiceTags tag={1} />
+            <ServiceTags tag={3} />
             <SlideList
               className={`banner-main bg-white ${
                 window.GlobalConfig.APP.Home?.SliderFull
                   ? "mb-8px"
-                  : "px-15px pt-15px"
+                  : "px-15px pt-15px pb-15px"
               } `}
               BannerName="App.Main"
               autoplaySpeed={4000}
@@ -218,7 +222,7 @@ export default class extends React.Component {
               containerClass="pl-15px pr-15px slider-hot"
               BannerName="App.DVHOT"
             />
-            <ProductList />
+            {/* <ProductList /> */}
             <NewsList />
           </div>
         </div>

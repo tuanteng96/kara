@@ -47,7 +47,8 @@
                     @include align-items(center);
                     a {
                         position: relative;
-                        padding-left: 20px;
+                        margin-left: 16px;
+                        height: 20px;
                         .count {
                             position: absolute;
                             display: inline-block;
@@ -75,15 +76,16 @@
                     }
                     .mess {
                         width: 18px;
-                        height: 18px;
+                        height: 20px;
                         font-size: 17px;
-                        padding-left: 16px;
+                        margin-left: 16px;
                     }
                     .call {
                         width: 18px;
-                        height: 18px;
                         font-size: 16px;
-                        animation: tadaNoti 1.5s ease infinite;
+                        i {
+                            animation: tadaNoti 1.5s ease infinite;
+                        }
                     }
                 }
             }

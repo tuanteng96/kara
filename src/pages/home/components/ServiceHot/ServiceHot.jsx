@@ -53,8 +53,7 @@ export default class ServiceHot extends React.Component {
       autoplay: true,
       autoplaySpeed: 5000,
     };
-
-    console.log(arrBanner);
+    
     return (
       <React.Fragment>
         {!isLoading && (

@@ -125,10 +125,16 @@ var routes = [{
     {
         path: '/sale/',
         asyncComponent: () => SalesDetailPage,
+        options: {
+            transition: 'f7-cover',
+        }
     },
     {
         path: '/sale/:id',
         asyncComponent: () => SalesDetailPage,
+        options: {
+            transition: 'f7-cover',
+        }
     },
     {
         path: '/rules-list/',

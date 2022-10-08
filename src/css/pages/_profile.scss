@@ -1,3 +1,23 @@
+.page-profile {
+    &-wrap {
+        height: calc(100% - var(--f7-toolbar-height));
+        .page-profile__order {
+            flex-grow: 1;
+            overflow: auto;
+        }
+    }
+    .page-profile__top {
+        position: relative;
+        z-index: 2;
+    }
+    .order-title {
+        padding: 15px 15px 12px 15px;
+        -webkit-box-shadow: 0px 10px 30px 0px rgb(82 63 105 / 8%);
+        box-shadow: 0px 10px 30px 0px rgb(82 63 105 / 8%);
+        font-size: 15px;
+    }
+}
+
 .page[data-name="profile-list"] {
     .ptr-preloader {
         background: $color-app;
@@ -46,9 +66,25 @@
         &__logout {
             position: absolute;
             top: 0;
-            right: 0;
+            right: 5px;
             a {
-                width: 45px;
+                width: 35px;
+                height: 45px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                i {
+                    color: $white;
+                    font-size: 20px;
+                }
+            }
+        }
+        &__qrcode {
+            position: absolute;
+            top: 0;
+            right: 40px;
+            a {
+                width: 35px;
                 height: 45px;
                 display: flex;
                 align-items: center;
@@ -69,9 +105,9 @@
         background: $white;
         z-index: 2;
         position: relative;
-        > img {
+        >img {
             position: absolute;
-            top: -50px;
+            bottom: 100%;
             left: 0;
         }
         &__avatar {

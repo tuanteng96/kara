@@ -5,6 +5,7 @@ import Skeleton from 'react-loading-skeleton'
 import PageNoData from '../../../components/PageNoData'
 import { checkImageProduct, formatPriceVietnamese } from '../../../constants/format'
 import UserService from '../../../service/user.service'
+import ReactHtmlParser from "react-html-parser";
 
 function OrderList(props) {
   const [loading, setLoading] = useState(false)
@@ -22,7 +23,7 @@ function OrderList(props) {
     UserService.getConfig('App.thanhtoan')
       .then(({ data }) => {
         setValuePay(data.data && data.data[0]?.ValueLines)
-        setLoadingPay(true)
+        setLoadingPay(false)
       })
       .catch((error) => console.log(error))
   }
@@ -53,12 +54,12 @@ function OrderList(props) {
 
   return (
     <div className="page-order">
-      <div className="page-order__list">
+      <div className="page-order__list p-0">
         {loading &&
-          Array(5)
+          Array(1)
             .fill()
             .map((item, index) => (
-              <Link key={index} href="" noLinkClass className="item">
+              <Link key={index} noLinkClass className="item mb-0 mt-2px">
                 <div className="item-header">
                   <i className="las la-dolly"></i>
                   <div className="text">
@@ -114,21 +115,21 @@ function OrderList(props) {
           <>
             {ListOrder && ListOrder.length > 0 ? (
               ListOrder.map((item, index) => (
-                <Link key={index} noLinkClass className="item">
-                  <div className="item-header">
+                <Link key={index} noLinkClass className="item mb-0 mt-2px">
+                  <div className="item-header px-15px">
                     <i className="las la-dolly"></i>
                     <div className="text">
                       <div className="date font-number">
                         {moment(item.OrderDate).format("HH:mm DD-MM-YYYY")}
                       </div>
                       <div className={`status ` + checkStatus(item)}>
-                        {item.IsReturn !== 0 && item.Status === 'cancel'
-                          ? 'Trả lại'
+                        {item.IsReturn !== 0 && item.Status === "cancel"
+                          ? "Trả lại"
                           : item.StatusText}
                       </div>
                     </div>
                   </div>
-                  <div className="item-body">
+                  <div className="item-body px-15px py-15px">
                     <div className="list-sub">
                       {item.Items &&
                         item.Items.map((sub, idx) => (
@@ -146,7 +147,7 @@ function OrderList(props) {
                         ))}
                     </div>
                   </div>
-                  <div className="item-footer">
+                  <div className="item-footer p-15px">
                     <div className="content-item">
                       <span>Tổng đơn hàng :</span>
                       <span className="price text-red font-number">
@@ -154,14 +155,14 @@ function OrderList(props) {
                         <b>₫</b>
                       </span>
                     </div>
-                    {item.Status !== 'cancel' && (
+                    {item.Status !== "cancel" && (
                       <div className="content-item">
                         {/* <span>Đã thanh toán :</span>
                                 <span className="price">
                                   {formatPriceVietnamese(item.Payed)}
                                   <b>₫</b>
                                 </span> */}
-                        {item.Status === 'finish' && (
+                        {item.Status === "finish" && (
                           <React.Fragment>
                             {item.thanhtoan.thanh_toan_tien > 0 && (
                               <React.Fragment>
@@ -169,7 +170,7 @@ function OrderList(props) {
                                 <span>Thanh toán thực tế :</span>
                                 <span className="price font-number">
                                   {formatPriceVietnamese(
-                                    Math.abs(item.thanhtoan.thanh_toan_tien),
+                                    Math.abs(item.thanhtoan.thanh_toan_tien)
                                   )}
                                   <b>₫</b>
                                 </span>
@@ -181,7 +182,7 @@ function OrderList(props) {
                                 <span>Thanh toán ví :</span>
                                 <span className="price font-number">
                                   {formatPriceVietnamese(
-                                    Math.abs(item.thanhtoan.thanh_toan_vi),
+                                    Math.abs(item.thanhtoan.thanh_toan_vi)
                                   )}
                                   <b>₫</b>
                                 </span>
@@ -193,7 +194,7 @@ function OrderList(props) {
                                 <span>Hoàn ví khi trả hàng :</span>
                                 <span className="price font-number">
                                   {formatPriceVietnamese(
-                                    Math.abs(item.thanhtoan.hoan_vi_tra_hang),
+                                    Math.abs(item.thanhtoan.hoan_vi_tra_hang)
                                   )}
                                   <b>₫</b>
                                 </span>
@@ -206,8 +207,8 @@ function OrderList(props) {
                                 <span className="price font-number">
                                   {formatPriceVietnamese(
                                     Math.abs(
-                                      item.thanhtoan.hoan_vi_ket_thuc_the,
-                                    ),
+                                      item.thanhtoan.hoan_vi_ket_thuc_the
+                                    )
                                   )}
                                   <b>₫</b>
                                 </span>
@@ -220,8 +221,8 @@ function OrderList(props) {
                                 <span className="price font-number">
                                   {formatPriceVietnamese(
                                     Math.abs(
-                                      item.thanhtoan.ket_thuc_the_hoan_tien,
-                                    ),
+                                      item.thanhtoan.ket_thuc_the_hoan_tien
+                                    )
                                   )}
                                   <b>₫</b>
                                 </span>
@@ -234,8 +235,8 @@ function OrderList(props) {
                                 <span className="price font-number">
                                   {formatPriceVietnamese(
                                     Math.abs(
-                                      item.thanhtoan.ket_thuc_the_hoan_vi,
-                                    ),
+                                      item.thanhtoan.ket_thuc_the_hoan_vi
+                                    )
                                   )}
                                   <b>₫</b>
                                 </span>
@@ -259,7 +260,7 @@ function OrderList(props) {
                                 <span>Trả hàng hoàn tiền :</span>
                                 <span className="price font-number">
                                   {formatPriceVietnamese(
-                                    Math.abs(item.thanhtoan.tra_hang_hoan_tien),
+                                    Math.abs(item.thanhtoan.tra_hang_hoan_tien)
                                   )}
                                   <b>₫</b>
                                 </span>
@@ -271,7 +272,7 @@ function OrderList(props) {
                                 <span>Trả hàng ví :</span>
                                 <span className="price font-number">
                                   {formatPriceVietnamese(
-                                    Math.abs(item.thanhtoan.tra_hang_hoan_vi),
+                                    Math.abs(item.thanhtoan.tra_hang_hoan_vi)
                                   )}
                                   <b>₫</b>
                                 </span>
@@ -287,8 +288,8 @@ function OrderList(props) {
                               item.thanhtoan.tong_gia_tri_dh -
                                 item.thanhtoan.thanh_toan_tien -
                                 item.thanhtoan.thanh_toan_vi -
-                                item.thanhtoan.thanh_toan_ao,
-                            ),
+                                item.thanhtoan.thanh_toan_ao
+                            )
                           )}
                           <b>₫</b>
                         </span>
@@ -297,7 +298,7 @@ function OrderList(props) {
                             item.thanhtoan.tong_gia_tri_dh -
                               item.thanhtoan.thanh_toan_tien -
                               item.thanhtoan.thanh_toan_vi -
-                              item.thanhtoan.thanh_toan_ao,
+                              item.thanhtoan.thanh_toan_ao
                           ) > 0 && (
                             <Button
                               sheetOpen={`.demo-sheet-${item.ID}`}
@@ -313,8 +314,8 @@ function OrderList(props) {
                     <Sheet
                       className={`demo-sheet-${item.ID} sheet-detail sheet-detail-order`}
                       style={{
-                        height: 'auto !important',
-                        '--f7-sheet-bg-color': '#fff',
+                        height: "auto !important",
+                        "--f7-sheet-bg-color": "#fff",
                       }}
                       swipeToClose
                       backdrop
@@ -333,17 +334,16 @@ function OrderList(props) {
                           <div className="content">
                             {loadingPay && <Skeleton count={6} />}
                             {!loadingPay &&
-                              textPay &&
+                              ValuePay &&
                               ReactHtmlParser(
-                                ValuePay
-                                  .replaceAll('ID_ĐH', `#${item.ID}`)
+                                ValuePay.replaceAll("ID_ĐH", `#${item.ID}`)
                                   .replaceAll(
-                                    'MONEY',
+                                    "MONEY",
                                     `${formatPriceVietnamese(
-                                      Math.abs(item.RemainPay),
-                                    )} ₫`,
+                                      Math.abs(item.RemainPay)
+                                    )} ₫`
                                   )
-                                  .replaceAll('ID_DH', `${item.ID}`),
+                                  .replaceAll("ID_DH", `${item.ID}`)
                               )}
                           </div>
                         </div>
@@ -359,7 +359,7 @@ function OrderList(props) {
         )}
       </div>
     </div>
-  )
+  );
 }
 
 export default OrderList
