@@ -1,57 +1,56 @@
-import React from "react";
-import { SERVER_APP } from "./../../constants/config";
-import { formatPriceVietnamese } from "../../constants/format";
-import { getStockIDStorage, getUser } from "../../constants/user";
-import ShopDataService from "./../../service/shop.service";
-import { Page, Link, Navbar } from "framework7-react";
-import NotificationIcon from "../../components/NotificationIcon";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { FaShippingFast } from "react-icons/fa";
-import SkeletonPayInfo from "./components/Pay/SkeletonPayInfo";
+import React from 'react'
+import { SERVER_APP } from './../../constants/config'
+import { formatPriceVietnamese } from '../../constants/format'
+import { getStockIDStorage, getUser } from '../../constants/user'
+import ShopDataService from './../../service/shop.service'
+import { Page, Link, Navbar } from 'framework7-react'
+import NotificationIcon from '../../components/NotificationIcon'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { FaShippingFast } from 'react-icons/fa'
+import SkeletonPayInfo from './components/Pay/SkeletonPayInfo'
 
-toast.configure();
+toast.configure()
 
 export default class extends React.Component {
   constructor() {
-    super();
+    super()
     this.state = {
       dfItem: [],
       items: [],
       order: [],
       deletedsOrder: [],
       editsOrder: [],
-      noteOrder: "",
-      SenderAddress: "",
+      SenderAddress: '',
       isLoading: true,
       isBtn: false,
-    };
+    }
   }
   componentDidMount() {
-    const infoUser = getUser();
+    const infoUser = getUser()
     if (infoUser) {
       this.setState({
         SenderAddress: infoUser.HomeAddress,
-      });
+      })
     }
-    this.getOrder();
+    this.getOrder()
   }
   getOrder = () => {
-    const infoUser = getUser();
+    const infoUser = getUser()
     if (!infoUser) {
-      this.$f7router.navigate("/login/");
-      return false;
+      this.$f7router.navigate('/login/')
+      return false
     }
     const data = {
       order: {
         ID: 0,
         SenderID: infoUser.ID,
       },
-      addProps: "ProdTitle",
-    };
+      addProps: 'ProdTitle',
+    }
     ShopDataService.getUpdateOrder(data)
       .then((response) => {
-        const data = response.data.data;
+        const data = response.data.data
         if (response.data.success) {
           //Total
           this.setState({
@@ -59,60 +58,108 @@ export default class extends React.Component {
             items: data.items.reverse(),
             order: data.order,
             isLoading: false,
-          });
+          })
         }
       })
-      .catch((er) => console.log(er));
-  };
+      .catch((er) => console.log(er))
+  }
 
   handleSubmit = () => {
-    const { order, noteOrder, SenderAddress } = this.state;
-    const infoUser = getUser();
-    const stockid = getStockIDStorage();
-    const self = this;
+    const {
+      order,
+      SenderAddress,
+      IsGiving,
+      IsVAT,
+      GivingName,
+      GivingPhone,
+      GivingAddress,
+      GivingNote,
+      VATCompany,
+      VATAddess,
+      VATCode,
+      Note,
+    } = this.state
+    const infoUser = getUser()
+    const stockid = getStockIDStorage()
+    const self = this
     this.setState({
       isBtn: true,
-    });
+    })
+    const SenderOther = `
+      ${
+        IsGiving ?
+        `
+        Tặng hoa cho người khác: \n
+        Tên người nhận: ${GivingName || 'Chưa có'} \n
+        Số điện thoại người nhận: ${GivingPhone || 'Chưa có'} \n
+        Địa chỉ: ${GivingAddress || 'Chưa có'} \n
+        Lời nhắn: ${GivingNote || 'Chưa có'} \n
+      ` : ''
+      } \n
+      ${
+        IsVAT ?
+        `
+        Xuất hóa đơn VAT: \n
+        Tên công ty: ${VATCompany || 'Chưa có'} \n
+        Địa chỉ: ${VATAddess || 'Chưa có'} \n
+        Mã số thuế : ${VATCode || 'Chưa có'} \n
+      ` : ''
+      } \n
+      ${IsGiving || IsVAT ? `Ghi chú khác: ${Note || "Không có"}` : Note}
+    `
+
     const data = {
       order: {
         ID: order.ID,
         SenderID: infoUser.ID,
-        Status: "user_sent",
-        SenderOther: noteOrder,
+        Status: 'user_sent',
+        SenderOther: SenderOther,
         SenderAddress: SenderAddress,
       },
       forceStockID: stockid,
-    };
-    self.$f7.preloader.show();
+    }
+    self.$f7.preloader.show()
     ShopDataService.getUpdateOrder(data)
       .then((response) => {
-        const data = response.data.data;
+        const data = response.data.data
         if (response.data.success) {
           setTimeout(() => {
-            toast.success("Đặt hàng thành công !", {
+            toast.success('Đặt hàng thành công !', {
               position: toast.POSITION.TOP_LEFT,
               autoClose: 3000,
-            });
+            })
             this.$f7router.navigate(
-              "/pay-success/" + data.order.ID + `/?money=${data.order.ToPay}`
-            );
-            self.$f7.preloader.hide();
-          }, 1000);
+              '/pay-success/' + data.order.ID + `/?money=${data.order.ToPay}`,
+            )
+            self.$f7.preloader.hide()
+          }, 1000)
         }
       })
-      .catch((er) => console.log(er));
-  };
+      .catch((er) => console.log(er))
+  }
 
-  handleNote = (value) => {
+  onChangeValue = (event) => {
+    const target = event.target
+    const value = target.type === 'checkbox' ? target.checked : target.value
+    const name = target.name
+
     this.setState({
-      noteOrder: value,
-    });
-  };
+      [name]: value,
+    })
+  }
 
   render() {
-    const { items, order, isLoading, isBtn, SenderAddress } = this.state;
+    const {
+      items,
+      order,
+      isLoading,
+      isBtn,
+      SenderAddress,
+      IsGiving,
+      IsVAT,
+    } = this.state
 
-    const infoUser = getUser();
+    const infoUser = getUser()
 
     return (
       <Page
@@ -139,7 +186,7 @@ export default class extends React.Component {
         <div className="page-render page-render-pay no-bg p-0">
           <div className="page-pay no-bg">
             <div className="page-pay-1">
-              <div className="page-pay__information">
+              <div className="page-pay__information px-15px">
                 <h4>
                   <FaShippingFast />
                   Địa chỉ nhận hàng
@@ -165,10 +212,10 @@ export default class extends React.Component {
                 </div>
                 <div className="line"></div>
               </div>
-              <h6 className="page-pay__title">Đơn hàng của bạn</h6>
+              <h6 className="page-pay__title px-15px">Đơn hàng của bạn</h6>
               {isLoading && <SkeletonPayInfo />}
               {!isLoading && (
-                <div className="page-pay__list page-pay__list2">
+                <div className="page-pay__list page-pay__list2 px-15px">
                   {items.length > 0
                     ? items &&
                       items.map((item, index) => (
@@ -176,7 +223,7 @@ export default class extends React.Component {
                           <div className="image">
                             <img
                               src={
-                                SERVER_APP + "/Upload/image/" + item.ProdThumb
+                                SERVER_APP + '/Upload/image/' + item.ProdThumb
                               }
                               alt={item.ProdTitle}
                             />
@@ -193,16 +240,124 @@ export default class extends React.Component {
                           </div>
                         </div>
                       ))
-                    : "Chưa có đơn hàng"}
+                    : 'Chưa có đơn hàng'}
                 </div>
               )}
+              <div className="bg-white mt-5px p-15px">
+                <div className="d--f jc--sb ai--c">
+                  <div className="fw-600">Tặng hoa cho người khác</div>
+                  <div>
+                    <span className="switch switch-sm">
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={IsGiving}
+                          name="IsGiving"
+                          onChange={this.onChangeValue}
+                        />
+                        <span></span>
+                      </label>
+                    </span>
+                  </div>
+                </div>
+                {IsGiving && (
+                  <div>
+                    <div className="mt-12px">
+                      <input
+                        className="input-control2"
+                        type="text"
+                        placeholder="Tên người nhận"
+                        name="GivingName"
+                        onChange={this.onChangeValue}
+                      />
+                    </div>
+                    <div className="mt-12px">
+                      <input
+                        className="input-control2"
+                        type="text"
+                        placeholder="Số điện thoại"
+                        name="GivingPhone"
+                        onChange={this.onChangeValue}
+                      />
+                    </div>
+                    <div className="mt-12px">
+                      <input
+                        className="input-control2"
+                        type="text"
+                        placeholder="Địa chỉ"
+                        name="GivingAddress"
+                        onChange={this.onChangeValue}
+                      />
+                    </div>
+                    <div className="mt-12px">
+                      <textarea
+                        className="input-control2"
+                        type="text"
+                        placeholder="Lời nhắn"
+                        name="GivingNote"
+                        onChange={this.onChangeValue}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="bg-white mt-5px p-15px">
+                <div className="d--f jc--sb ai--c">
+                  <div className="fw-600">Xuất hóa đơn VAT</div>
+                  <div>
+                    <span className="switch switch-sm">
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={IsVAT}
+                          name="IsVAT"
+                          onChange={this.onChangeValue}
+                        />
+                        <span></span>
+                      </label>
+                    </span>
+                  </div>
+                </div>
+                {IsVAT && (
+                  <div>
+                    <div className="mt-12px">
+                      <input
+                        className="input-control2"
+                        type="text"
+                        placeholder="Tên công ty"
+                        name="VATCompany"
+                        onChange={this.onChangeValue}
+                      />
+                    </div>
+                    <div className="mt-12px">
+                      <input
+                        className="input-control2"
+                        type="text"
+                        placeholder="Địa chỉ"
+                        name="VATAddess"
+                        onChange={this.onChangeValue}
+                      />
+                    </div>
+                    <div className="mt-12px">
+                      <input
+                        className="input-control2"
+                        type="text"
+                        placeholder="Mã số thuế"
+                        name="VATCode"
+                        onChange={this.onChangeValue}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className="page-pay__note">
                 <div className="item">
                   <p>Ghi chú :</p>
                   <textarea
                     placeholder="Để lại lưu ý ..."
                     type="text"
-                    onChange={(e) => this.handleNote(e.target.value)}
+                    name="Note"
+                    onChange={this.onChangeValue}
                   ></textarea>
                 </div>
               </div>
@@ -273,8 +428,8 @@ export default class extends React.Component {
                   <div className="box">
                     <div className="box-text p-0">
                       <span className="vcode">
-                        {order && order.VoucherCode === ""
-                          ? "Chưa có"
+                        {order && order.VoucherCode === ''
+                          ? 'Chưa có'
                           : order.VoucherCode}
                       </span>
                     </div>
@@ -322,14 +477,14 @@ export default class extends React.Component {
                     Thành tiền :
                     <span>
                       {formatPriceVietnamese(
-                        order && Math.abs(order.RemainPay)
+                        order && Math.abs(order.RemainPay),
                       )}
                       <b>₫</b>
                     </span>
                   </div>
                   <div className="btns">
                     <button
-                      className={`btn-small ${isBtn && "loading"}`}
+                      className={`btn-small ${isBtn && 'loading'}`}
                       type="button"
                       onClick={() => this.handleSubmit()}
                     >
@@ -347,6 +502,6 @@ export default class extends React.Component {
           </div>
         </div>
       </Page>
-    );
+    )
   }
 }

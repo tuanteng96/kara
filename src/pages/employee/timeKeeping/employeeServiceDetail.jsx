@@ -507,12 +507,12 @@ export default class employeeServiceDetail extends React.Component {
                       moment(itemDetail?.BookDate).format("HH:mm DD/MM/YYYY")}
                   </span>
                 </li>
-                {"Minutes" in itemDetail && (
+                {/* {"Minutes" in itemDetail && (
                   <li>
                     <span>Số phút</span>
                     <span>{itemDetail && (itemDetail.Minutes || 0)}p /Ca</span>
                   </li>
-                )}
+                )} */}
                 <li>
                   <span>Điểm</span>
                   <span>

@@ -21,7 +21,7 @@ export default class employeeServiceHistory extends React.Component {
   constructor() {
     super();
     this.state = {
-      tabActive: "DV",
+      tabActive: "SPDM",
     };
     this.selectorRef = React.createRef(null);
   }
@@ -70,7 +70,7 @@ export default class employeeServiceHistory extends React.Component {
               <NotificationIcon />
             </div>
           </div>
-          <Subnavbar className="cardservice-tab-head">
+          {/* <Subnavbar className="cardservice-tab-head">
             <div className="cardservice-title">
               <Link
                 noLinkClass
@@ -94,7 +94,7 @@ export default class employeeServiceHistory extends React.Component {
                 Buổi còn
               </Link>
             </div>
-          </Subnavbar>
+          </Subnavbar> */}
         </Navbar>
         {tabActive === "DV" && (
           <Animated
