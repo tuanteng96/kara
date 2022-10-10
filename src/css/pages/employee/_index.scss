@@ -17,9 +17,9 @@
             h3 {
                 margin: 0;
                 color: #3F4254;
-                font-size: 14px;
+                font-size: 15px;
                 line-height: 24px;
-                font-weight: 800;
+                font-weight: 600;
                 span {
                     margin-right: 8px;
                     vertical-align: top;
@@ -35,10 +35,9 @@
                     padding-right: 15px;
                     //@include justify-content (space-between);
                     span:first-child {
-                        color: #B5B5C3;
-                        font-weight: 600;
-                        line-height: 22px;
-                        font-size: 12px;
+                        color: #696969;
+                        line-height: 24px;
+                        font-size: 13px;
                     }
                     span:last-child {
                         padding-left: 10px;
@@ -522,5 +521,32 @@
     &.label-light-danger {
         color: #f64e60 !important;
         background-color: #ffe2e5;
+    }
+}
+
+.photo-browser-page {
+    &.photo-browser-page-light {
+        .title {
+            color: #fff;
+        }
+        .popup-close {
+            color: #fff;
+            font-size: 14px;
+            padding-right: 15px;
+        }
+    }
+}
+
+.employee-tab-head {
+    background: rgb(255 255 255 / 64%);
+    a {
+        color: #000;
+        font-weight: 500;
+        &:first-child {
+            border-right: 1px solid #cdcdcd;
+        }
+        &.active {
+            color: var(--ezs-color);
+        }
     }
 }

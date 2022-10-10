@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Actions,
   ActionsButton,
@@ -14,237 +14,238 @@ import {
   Tab,
   Tabs,
   Toolbar,
-} from 'framework7-react'
-import NotificationIcon from '../../../components/NotificationIcon'
-import ToolBarBottom from '../../../components/ToolBarBottom'
+} from "framework7-react";
+import NotificationIcon from "../../../components/NotificationIcon";
+import ToolBarBottom from "../../../components/ToolBarBottom";
 import {
   getPassword,
   getStockIDStorage,
   getUser,
-} from '../../../constants/user'
-import staffService from '../../../service/staff.service'
-import moment from 'moment'
-import 'moment/locale/vi'
-import PageNoData from '../../../components/PageNoData'
-import SkeletonService from './skeleton/SkeletonService'
-import { groupbyTIME } from '../../../constants/format'
-moment.locale('vi')
+} from "../../../constants/user";
+import staffService from "../../../service/staff.service";
+import moment from "moment";
+import "moment/locale/vi";
+import PageNoData from "../../../components/PageNoData";
+import SkeletonService from "./skeleton/SkeletonService";
+import { groupbyTIME } from "../../../constants/format";
+import EmployeeServiceItem from "./EmployeeServiceItem";
+moment.locale("vi");
 export default class employeeService extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
       isLoading: true,
       loadingSubmit: false,
       sheetOpened: false,
       messageForce: false,
       showPreloader: false,
-      keyword: '',
-      startDate: '',
-      endDate: '',
+      keyword: "",
+      startDate: "",
+      endDate: "",
       arrDefaultDate: [],
-    }
+    };
   }
 
   componentDidMount() {
     const formData = {
-      cmd: 'member_sevice',
+      cmd: "member_sevice",
       IsManager: 1,
       IsService: 1,
-      MemberIDs: '',
-      srv_status: 'book,wait_book,wait,doing,done,cancel',
-      srv_from: moment().format('l'),
-      srv_to: moment().format('l'),
-      key: '',
+      MemberIDs: "",
+      srv_status: "book,wait_book,wait,doing,done,cancel",
+      srv_from: moment().format("l"),
+      srv_to: moment().format("l"),
+      key: "",
       ps: 1000,
-    }
-    this.getService(formData)
+    };
+    this.getService(formData);
   }
 
   getService = (data) => {
-    if (!getUser()) return false
-    const infoMember = getUser()
+    if (!getUser()) return false;
+    const infoMember = getUser();
     const user = {
       USN: infoMember.UserName,
       PWD: getPassword(),
       StockID: getStockIDStorage(),
-    }
+    };
 
     staffService
       .getServiceStaff(user, data)
       .then((response) => {
-        const { data, mBook } = response.data
+        const { data, mBook } = response.data;
         setTimeout(() => {
           this.setState({
-            arrService: groupbyTIME(data, 'BookDate'),
-            mBook: groupbyTIME(mBook, 'BookDate'),
+            arrService: groupbyTIME(data, "BookDate"),
+            mBook: groupbyTIME(mBook, "BookDate"),
             isLoading: false,
-          })
-        }, 200)
+          });
+        }, 200);
       })
-      .catch((err) => console.log(err))
-  }
+      .catch((err) => console.log(err));
+  };
 
   checkStatus = (status) => {
     switch (status) {
-      case 'done':
+      case "done":
         return (
           <span className="label-inline label-light-success">Hoàn thành</span>
-        )
-      case 'doing':
+        );
+      case "doing":
         return (
           <span className="label-inline label-light-warning">
             Đang thực hiện
           </span>
-        )
+        );
       default:
         return (
           <span className="label-inline label-light-info">Chưa thực hiện</span>
-        )
+        );
     }
-  }
+  };
 
   checkStatusBook = (item) => {
     switch (item?.Status) {
-      case 'KHACH_KHONG_DEN':
+      case "KHACH_KHONG_DEN":
         return (
           <span className="label-inline label-light-success">
-            Khách không đến{' '}
-            {item?.Member?.MobilePhone !== '0000000000' && (
+            Khách không đến{" "}
+            {item?.Member?.MobilePhone !== "0000000000" && (
               <>
-                {item?.Member.IsAnonymous && '- Khách vãng lai'}{' '}
-                {item?.IsNew && '- Khách mới'}
+                {item?.Member.IsAnonymous && "- Khách vãng lai"}{" "}
+                {item?.IsNew && "- Khách mới"}
               </>
             )}
           </span>
-        )
-      case 'KHACH_DEN':
+        );
+      case "KHACH_DEN":
         return (
           <span className="label-inline label-light-warning">
-            Khách tới{' '}
-            {item?.Member?.MobilePhone === '0000000000' && (
+            Khách tới{" "}
+            {item?.Member?.MobilePhone === "0000000000" && (
               <>
-                {item?.Member.IsAnonymous && '- Khách vãng lai'}{' '}
-                {item?.IsNew && '- Khách mới'}
+                {item?.Member.IsAnonymous && "- Khách vãng lai"}{" "}
+                {item?.IsNew && "- Khách mới"}
               </>
             )}
           </span>
-        )
+        );
       default:
         return (
           <span className="label-inline label-light-info">
-            Đã xác nhận{' '}
-            {item?.Member?.MobilePhone === '0000000000' && (
+            Đã xác nhận{" "}
+            {item?.Member?.MobilePhone === "0000000000" && (
               <>
-                {item?.Member.IsAnonymous && '- Khách vãng lai'}{' '}
-                {item?.IsNew && '- Khách mới'}
+                {item?.Member.IsAnonymous && "- Khách vãng lai"}{" "}
+                {item?.IsNew && "- Khách mới"}
               </>
             )}
           </span>
-        )
+        );
     }
-  }
+  };
 
   handleDetail = (item) => {
-    this.$f7router.navigate('/employee/service/' + item.ID + '/')
-  }
+    this.$f7router.navigate("/employee/service/" + item.ID + "/");
+  };
   handleDiary = (item) => {
-    this.$f7router.navigate('/employee/diary/' + item.MemberID + '/')
-  }
+    this.$f7router.navigate("/employee/diary/" + item.MemberID + "/");
+  };
   handleSchedule = (item) => {
-    this.$f7router.navigate('/employee/schedule/' + item.OrderItemID + '/')
-  }
+    this.$f7router.navigate("/employee/schedule/" + item.OrderItemID + "/");
+  };
   handleHistory = (item) => {
     this.$f7router.navigate(
-      '/employee/history/' + item.OrderItemID + '/' + item.MemberID + '/',
-    )
-  }
+      "/employee/history/" + item.OrderItemID + "/" + item.MemberID + "/"
+    );
+  };
 
   handleClickSv = (item) => {
-    this.refs.actionService.open()
-  }
+    this.refs.actionService.open();
+  };
 
   onChangeTextS = (evt) => {
     this.setState({
       keyword: evt.target.value,
-    })
-  }
+    });
+  };
   clearInput = () => {
     this.setState({
-      keyword: '',
-    })
-  }
+      keyword: "",
+    });
+  };
   onChangeDateS = (evt) => {
-    const start = evt[0]
-    const end = evt[1] ? evt[1] : evt[0]
+    const start = evt[0];
+    const end = evt[1] ? evt[1] : evt[0];
     this.setState({
-      startDate: moment(start).format('DD/MM/YYYY'),
-      endDate: moment(end).format('DD/MM/YYYY'),
+      startDate: moment(start).format("DD/MM/YYYY"),
+      endDate: moment(end).format("DD/MM/YYYY"),
       arrDefaultDate: evt,
-    })
-  }
+    });
+  };
 
   onInputFocus = () => {
     this.setState({
       messageForce: false,
-    })
-  }
+    });
+  };
 
   openFilter = () => {
     this.setState({
       sheetOpened: true,
-    })
-  }
+    });
+  };
 
   closeSheet = () => {
     this.setState({
       sheetOpened: false,
-    })
-  }
+    });
+  };
 
   searchSubmit = async () => {
-    const { startDate, endDate, keyword } = this.state
+    const { startDate, endDate, keyword } = this.state;
     this.setState({
       loadingSubmit: true,
       isLoading: true,
-    })
+    });
     const formData = {
-      cmd: 'member_sevice',
+      cmd: "member_sevice",
       IsManager: 1,
       IsService: 1,
-      MemberIDs: '',
-      srv_status: 'book,wait_book,wait,doing,done,cancel',
-      srv_from: startDate ? startDate : moment().format('l'),
-      srv_to: endDate ? endDate : moment().format('l'),
+      MemberIDs: "",
+      srv_status: "book,wait_book,wait,doing,done,cancel",
+      srv_from: startDate ? startDate : moment().format("l"),
+      srv_to: endDate ? endDate : moment().format("l"),
       key: keyword,
       ps: 1000,
-    }
-    const result = await this.getService(formData)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    };
+    const result = await this.getService(formData);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     this.setState({
       loadingSubmit: false,
       sheetOpened: false,
       isLoading: false,
-    })
-  }
+    });
+  };
 
   async loadRefresh(done) {
-    const { startDate, endDate, keyword } = this.state
+    const { startDate, endDate, keyword } = this.state;
     const formData = {
-      cmd: 'member_sevice',
+      cmd: "member_sevice",
       IsManager: 1,
       IsService: 1,
-      MemberIDs: '',
-      srv_status: 'book,wait_book,wait,doing,done,cancel',
-      srv_from: startDate || moment().format('l'),
-      srv_to: endDate || moment().format('l'),
-      key: keyword || '',
+      MemberIDs: "",
+      srv_status: "book,wait_book,wait,doing,done,cancel",
+      srv_from: startDate || moment().format("l"),
+      srv_to: endDate || moment().format("l"),
+      key: keyword || "",
       ps: 1000,
-    }
+    };
 
-    await this.getService(formData)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    done()
+    await this.getService(formData);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    done();
   }
 
   render() {
@@ -256,7 +257,7 @@ export default class employeeService extends React.Component {
       sheetOpened,
       messageForce,
       arrDefaultDate,
-    } = this.state
+    } = this.state;
     return (
       <Page
         name="employee-service"
@@ -273,7 +274,7 @@ export default class employeeService extends React.Component {
             </div>
             <div className="page-navbar__title">
               <span className="title">
-                Công việc{' '}
+                Công việc{" "}
                 {arrService &&
                   arrService.length > 0 &&
                   `(${arrService.length})`}
@@ -303,80 +304,14 @@ export default class employeeService extends React.Component {
                   <>
                     {arrService.length > 0 ? (
                       arrService.map((item, index) => (
-                        <div key={index}>
-                          <div className="item">
-                            <h3>
-                              {this.checkStatus(item.Status)}
-                              {item.Title}
-                            </h3>
-                            <ul>
-                              <li>
-                                <span>Khách hàng : </span>
-                                <span>{item.member.FullName}</span>
-                              </li>
-                              <li>
-                                <span>Ngày đặt lịch : </span>
-                                <span>{moment(item.BookDate).format('L')}</span>
-                              </li>
-                              <li>
-                                <span>Giờ đặt lịch : </span>
-                                <span>
-                                  {moment(item.BookDate).format('LT')}
-                                </span>
-                              </li>
-                              {item.Desc && (
-                                <li>
-                                  <span>Ghi chú : </span>
-                                  <span>{item.Desc}</span>
-                                </li>
-                              )}
-
-                              {/* <li>
-                                <span>Số phút : </span>
-                                <span>{item.RootMinutes}p/Ca</span>
-                              </li> */}
-                            </ul>
-                            <Button
-                              noClassName
-                              raised={true}
-                              actionsOpen={`#actions-group-${item.ID}`}
-                            ></Button>
-                          </div>
-                          <Actions
-                            className="actions-custom"
-                            id={`actions-group-${item.ID}`}
-                          >
-                            <ActionsGroup>
-                              <ActionsLabel>{item.Title}</ActionsLabel>
-                              <ActionsButton
-                                onClick={() => this.handleDetail(item)}
-                              >
-                                Xem chi tiết
-                              </ActionsButton>
-                              <ActionsButton
-                                onClick={() => this.handleDiary(item)}
-                              >
-                                Nhật ký
-                              </ActionsButton>
-                              {/* <ActionsButton
-                                onClick={() => this.handleSchedule(item)}
-                              >
-                                Lịch trình
-                              </ActionsButton> */}
-                              {!window?.GlobalConfig?.APP?.Staff
-                                ?.hideHistoryMember && (
-                                <ActionsButton
-                                  onClick={() => this.handleHistory(item)}
-                                >
-                                  Lịch sử khách hàng
-                                </ActionsButton>
-                              )}
-                            </ActionsGroup>
-                            <ActionsGroup>
-                              <ActionsButton color="red">Đóng</ActionsButton>
-                            </ActionsGroup>
-                          </Actions>
-                        </div>
+                        <EmployeeServiceItem
+                          key={index}
+                          item={item}
+                          checkStatus={this.checkStatus}
+                          handleDetail={this.handleDetail}
+                          handleDiary={this.handleDiary}
+                          handleHistory={this.handleHistory}
+                        />
                       ))
                     ) : (
                       <PageNoData text="Bạn không có lịch cắm hoa !" />
@@ -396,7 +331,7 @@ export default class employeeService extends React.Component {
                           <div className="item">
                             <h3>
                               {this.checkStatusBook(item)}
-                              {item.RootTitles} {item.AtHome && '- Tại nhà'}
+                              {item.RootTitles} {item.AtHome && "- Tại nhà"}
                             </h3>
                             <ul>
                               <li>
@@ -412,7 +347,7 @@ export default class employeeService extends React.Component {
                                   <span>
                                     {item?.Phone ||
                                       item?.Member?.MobilePhone ||
-                                      'Không có'}
+                                      "Không có"}
                                   </span>
                                 </li>
                               )}
@@ -422,17 +357,17 @@ export default class employeeService extends React.Component {
                               </li>
                               <li>
                                 <span>Ngày đặt lịch : </span>
-                                <span>{moment(item.BookDate).format('L')}</span>
+                                <span>{moment(item.BookDate).format("L")}</span>
                               </li>
                               <li>
                                 <span>Giờ đặt lịch : </span>
                                 <span>
-                                  {moment(item.BookDate).format('LT')}
+                                  {moment(item.BookDate).format("LT")}
                                 </span>
                               </li>
                               <li className="w-100 p-0">
                                 <span>Ghi chú : </span>
-                                <span>{item.Desc || 'Không có'}</span>
+                                <span>{item.Desc || "Không có"}</span>
                               </li>
                             </ul>
                             {!item?.Member?.IsAnonymous && (
@@ -486,7 +421,7 @@ export default class employeeService extends React.Component {
 
         <Sheet
           className="sheet-swipe-product sheet-swipe-employee"
-          style={{ height: 'auto', '--f7-sheet-bg-color': '#fff' }}
+          style={{ height: "auto", "--f7-sheet-bg-color": "#fff" }}
           opened={sheetOpened}
           onSheetClosed={() => this.closeSheet()}
           swipeToClose
@@ -517,10 +452,10 @@ export default class employeeService extends React.Component {
                       value={arrDefaultDate}
                       readonly
                       calendarParams={{
-                        dateFormat: 'dd/mm/yyyy',
+                        dateFormat: "dd/mm/yyyy",
                         rangePicker: true,
                         footer: true,
-                        toolbarCloseText: 'Xác nhận',
+                        toolbarCloseText: "Xác nhận",
                         backdrop: true,
                       }}
                       clearButton
@@ -531,7 +466,7 @@ export default class employeeService extends React.Component {
                 <div className="sheet-pay-body__btn">
                   <button
                     className={`page-btn-order btn-submit-order ${
-                      loadingSubmit && 'loading'
+                      loadingSubmit && "loading"
                     }`}
                     onClick={() => this.searchSubmit()}
                   >
@@ -553,6 +488,6 @@ export default class employeeService extends React.Component {
           <ToolBarBottom />
         </Toolbar>
       </Page>
-    )
+    );
   }
 }
