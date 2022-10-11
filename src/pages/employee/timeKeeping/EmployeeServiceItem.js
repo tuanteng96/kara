@@ -18,6 +18,7 @@ import "moment/locale/vi";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useRef } from "react";
+import { SERVER_APP } from "../../../constants/config";
 moment.locale("vi");
 
 EmployeeServiceItem.propTypes = {};
@@ -32,15 +33,22 @@ function EmployeeServiceItem({
   const [tabCurrent, setTabCurrent] = useState("tab-1");
   const refPhotoWeb = useRef();
   const refPhotoReal = useRef();
-  const [PhotoWeb, setPhotoWeb] = useState([
-    "https://chiasetainguyen.com/upload-file/lang-hoa-8-3-dep-15c6dfaa387871.png",
-    "https://img1.kienthucvui.vn/uploads/2020/03/17/cac-mau-cam-hoa-cam-chuong-dep_123225797.jpg",
-    "https://img1.kienthucvui.vn/uploads/2020/03/17/hinh-anh-mau-cam-hoa-dep-nhat_123226547.jpg",
-  ]);
-  const [PhotoReal, setPhotoReal] = useState([
-    "https://chiasetainguyen.com/upload-file/lang-hoa-8-3-dep-135c6e002eb823d.jpg",
-    "https://img4.thuthuatphanmem.vn/uploads/2020/02/13/50-mau-cam-hoa-nghe-thuat-tuyet-dep_024315448.jpg",
-  ]);
+  const [PhotoWeb, setPhotoWeb] = useState([]);
+  const [PhotoReal, setPhotoReal] = useState([]);
+
+  useEffect(() => {
+    if (item && item.Photos) {
+      const newPhotoWeb = item?.Photos.filter(
+        (item) => item.Type === "Product"
+      ).map((item) => `${SERVER_APP}upload/image/${item.Src}`);
+      const newPhotoReal = item?.Photos.filter(
+        (item) => item.Type === "Attachment"
+      ).map((item) => `${SERVER_APP}upload/image/${item.Src}`);
+      setPhotoWeb(newPhotoWeb);
+      setPhotoReal(newPhotoReal);
+      if(newPhotoReal && newPhotoReal.length > 0) setTabCurrent("tab-2");
+    }
+  }, [item]);
 
   return (
     <>
@@ -73,6 +81,7 @@ function EmployeeServiceItem({
                     <img
                       src={item}
                       onClick={() => refPhotoWeb?.current?.open(index)}
+                      className="w-100"
                     />
                   </SwiperSlide>
                 ))}
@@ -98,6 +107,7 @@ function EmployeeServiceItem({
                     <img
                       src={item}
                       onClick={() => refPhotoReal?.current?.open(index)}
+                      className="w-100"
                     />
                   </SwiperSlide>
                 ))}

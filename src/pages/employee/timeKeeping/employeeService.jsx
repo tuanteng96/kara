@@ -30,6 +30,7 @@ import SkeletonService from "./skeleton/SkeletonService";
 import { groupbyTIME } from "../../../constants/format";
 import EmployeeServiceItem from "./EmployeeServiceItem";
 moment.locale("vi");
+
 export default class employeeService extends React.Component {
   constructor() {
     super();
