@@ -40,10 +40,10 @@ function EmployeeServiceItem({
     if (item && item.Photos) {
       const newPhotoWeb = item?.Photos.filter(
         (item) => item.Type === "Product"
-      ).map((item) => `${SERVER_APP}upload/image/${item.Src}`);
+      ).map((item) => `${SERVER_APP}/upload/image/${item.Src}`);
       const newPhotoReal = item?.Photos.filter(
         (item) => item.Type === "Attachment"
-      ).map((item) => `${SERVER_APP}upload/image/${item.Src}`);
+      ).map((item) => `${SERVER_APP}/upload/image/${item.Src}`);
       setPhotoWeb(newPhotoWeb);
       setPhotoReal(newPhotoReal);
       if(newPhotoReal && newPhotoReal.length > 0) setTabCurrent("tab-2");
